@@ -1,0 +1,79 @@
+{% extends 'admin_side/admin_dashboard.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Create a New Quiz</h2>
+
+    <!-- Quiz Creation Form -->
+    <form action="{{ url_for('create_quiz') }}" method="POST" class="p-4 border rounded shadow bg-white">
+        <div class="mb-3">
+            <label for="title" class="form-label">Quiz Title:</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="subject" class="form-label">Select Subject:</label>
+            <select class="form-select" id="subject" name="subject" required>
+                <option value="" disabled selected>Choose a Subject</option>
+                {% for subject in subjects %}
+                    <option value="{{ subject.id }}">{{ subject.sub_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="chapter" class="form-label">Select Chapter:</label>
+            <select class="form-select" id="chapter" name="chapter" required>
+                <option value="" disabled selected>Choose a Chapter</option>
+                <!-- Chapters will be populated dynamically -->
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="num_questions" class="form-label">Number of Questions:</label>
+            <input type="number" class="form-control" id="num_questions" name="num_questions" min="1" required readonly>
+        </div>
+
+        <div class="mb-3">
+            <label for="duration" class="form-label">Duration (in minutes):</label>
+            <input type="number" class="form-control" id="duration" name="duration" min="1" required>
+        </div>
+
+        <button type="submit" class="btn btn-success">Create Quiz</button>
+        <a href="{{ url_for('view_quizzes') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<!-- JavaScript for Dynamic Chapter & Question Count Selection -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    let subjectDropdown = document.getElementById("subject");
+    let chapterDropdown = document.getElementById("chapter");
+    let numQuestionsInput = document.getElementById("num_questions");
+
+    let chapters = JSON.parse('{{ chapters | safe }}'); // Load chapters data
+
+    subjectDropdown.addEventListener("change", function () {
+        let subjectId = this.value;
+        chapterDropdown.innerHTML = '<option value="" disabled selected>Choose a Chapter</option>';
+        numQuestionsInput.value = ''; // Reset question count when subject changes
+
+        if (subjectId && chapters[subjectId]) {
+            chapters[subjectId].forEach(chapter => {
+                let option = document.createElement("option");
+                option.value = chapter.id;
+                option.textContent = chapter.name;
+                option.setAttribute("data-questions", chapter.question_count); // Store number of questions
+                chapterDropdown.appendChild(option);
+            });
+        }
+    });
+
+    chapterDropdown.addEventListener("change", function () {
+        let selectedOption = chapterDropdown.options[chapterDropdown.selectedIndex];
+        let questionCount = selectedOption.getAttribute("data-questions") || 0;
+        numQuestionsInput.value = questionCount; // Auto-fill question count
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "admin_side/admin_dashboard.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Student Media Records</h2>
+
+    <!-- Snapshots Section -->
+    <h4 class="mt-4">Snapshots</h4>
+    {% if snapshots %}
+    <div class="row">
+        {% for snapshot in snapshots %}
+        <div class="col-md-3">
+            <div class="card mb-3">
+                <img src="data:image/png;base64,{{ snapshot.image | b64encode }}" class="card-img-top" alt="Snapshot">
+                <div class="card-body">
+                    <p class="card-text text-center">
+                        <strong>Captured:</strong> {{ snapshot.timestamp.strftime('%d-%m-%Y %H:%M:%S') }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-warning">No snapshots available.</div>
+    {% endif %}
+
+    <!-- Audio Records Section -->
+    <h4 class="mt-4">Audio Records</h4>
+    {% if audio_records %}
+    <ul class="list-group">
+        {% for audio in audio_records %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span><strong>Recorded:</strong> {{ audio.timestamp.strftime('%d-%m-%Y %H:%M:%S') }}</span>
+            <audio controls>
+                <source src="data:audio/wav;base64,{{ audio.audio | b64encode }}" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <div class="alert alert-warning">No audio records available.</div>
+    {% endif %}
+
+    <!-- Back Button -->
+    <div class="text-center mt-4">
+        <a href="{{ url_for('summary') }}" class="btn btn-primary">Back to Summary</a>
+    </div>
+</div>
+{% endblock %}

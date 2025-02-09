@@ -1,0 +1,43 @@
+{% extends 'admin_side/admin_dashboard.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Edit Quiz</h2>
+    <form action="{{ url_for('edit_quiz', quiz_id=quiz.id) }}" method="POST">
+        <div class="mb-3">
+            <label for="title" class="form-label">Quiz Title</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{ quiz.title }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="subject" class="form-label">Select Subject</label>
+            <select class="form-control" id="subject" name="subject" required>
+                {% for subject in subjects %}
+                <option value="{{ subject.id }}" {% if subject.id == quiz.subject_id %}selected{% endif %}>
+                    {{ subject.sub_name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="chapter" class="form-label">Select Chapter</label>
+            <select class="form-control" id="chapter" name="chapter" required>
+                {% for chapter in quiz.subject.chapters %}
+                <option value="{{ chapter.id }}" {% if chapter.id == quiz.chapter_id %}selected{% endif %}>
+                    {{ chapter.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="num_questions" class="form-label">Number of Questions</label>
+            <input type="number" class="form-control" id="num_questions" name="num_questions" value="{{ quiz.num_questions }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="duration" class="form-label">Duration (minutes)</label>
+            <input type="number" class="form-control" id="duration" name="duration" value="{{ quiz.duration }}" required>
+        </div>
+        <button type="submit" class="btn btn-success">Update Quiz</button>
+        <a href="{{ url_for('view_quizzes') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

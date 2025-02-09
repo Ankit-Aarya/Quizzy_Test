@@ -1,0 +1,38 @@
+{% extends "user_side/user_dashboard.html" %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4 text-center">Your Quiz Results</h2>
+
+    {% if attempts %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark bg-primary">
+                <tr>
+                    <th>Quiz Title</th>
+                    <th>Score</th>
+                    <th>Total Questions</th>
+                    <th>Percentage</th>
+                    <th>Attempt Date & Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for attempt, quiz_title in attempts %}
+                <tr>
+                    <td>{{ quiz_title }}</td>
+                    <td>{{ attempt.score }}</td>
+                    <td>{{ attempt.total_questions }}</td>
+                    <td>{{ (attempt.score) }}%</td>
+                    <td>{{ attempt.timestamp.strftime('%d-%m-%y %H:%M:%S') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-warning text-center" role="alert">
+        No quiz attempts found.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

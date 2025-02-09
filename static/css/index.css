@@ -1,0 +1,28 @@
+/* Flash Messages */
+/* Flash Messages */
+.flash-message {
+    background-color: #f8d7da; /* Light red for error or alerts */
+    color: #721c24; /* Dark red text */
+    padding: 15px;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    position: absolute; /* Position it relative to the page */
+    top: 80px; /* Adjust to be below the navbar height */
+    left: 30px; /* Align it to the left side of the page */
+    max-width: 300px; /* Optional: Limit the width */
+    z-index: 1000; /* Ensure it stays above other elements */
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  }
+  .flash-message.success {
+    background-color: #103203;
+    color: #1fd249;
+    border: 1px solid #1a30da;
+}
+
+.flash-message.danger {
+    background-color: #a10707;
+    color: #eaa4ab;
+    border: 1px solid #1a30da;
+}

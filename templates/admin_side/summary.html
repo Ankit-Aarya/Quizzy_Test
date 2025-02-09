@@ -1,0 +1,51 @@
+{% extends "admin_side/admin_dashboard.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Student Quiz Summary</h2>
+
+    {% if records %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Student Name</th>
+                    <th>Quiz Title</th>
+                    <th>Score</th>
+                    <th>Total Questions</th>
+                    <th>Percentage</th>
+                    <th>Attempt Date & Time</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for attempt, student, quiz in records %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ student.name }}</td>
+                    <td>{{ quiz.title }}</td>
+                    <td>{{ attempt.score }}</td>
+                    <td>{{ attempt.total_questions }}</td>
+                    <td>{{ attempt.score }}%</td>
+                    <td>{{ attempt.timestamp.strftime('Date: %d-%m-%y Time: %H:%M:%S') }}</td>
+                    <td>
+                        <a href="{{ url_for('view_media', user_id=student.id, quiz_id=quiz.id) }}" class="btn btn-info">
+                            View Media
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-warning text-center">No quiz records found.</div>
+    {% endif %}
+
+    <!-- Back Button -->
+    <div class="text-center mt-4">
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-primary">Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}

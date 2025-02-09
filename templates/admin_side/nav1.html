@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quizzy</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='css/nav1.css')}}">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <!-- Logo on the left -->
+      <a class="navbar-brand" href="{{url_for('admin_dashboard')}}">Quizzy</a>
+      
+      <!-- Navbar items on the right -->
+      <ul class="nav-content">
+        <li class="nav-item">
+          <a href="{{url_for('admin_dashboard')}}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a href="{{url_for('view_quizzes')}}">Quiz</a>
+        </li>
+
+        <li class="nav-item">
+          <a href="{{url_for('summary')}}">Summary</a>
+        </li>
+        
+        <li class="nav-item">
+          <a href="{{url_for('logout')}}">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</body>
+</html>

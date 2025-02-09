@@ -1,0 +1,43 @@
+{% extends 'admin_side/admin_dashboard.html' %}
+
+{% block title %}View Chapters - {{ subject.sub_name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">{{ subject.sub_name }}</h2>
+
+    <!-- Flash Messages -->
+    {% include "flash.html" %}
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Chapter Name</th>
+                    <th>Number of Questions</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for chapter in subject.chapters %}
+                <tr>
+                    <td>{{ chapter.name }}</td>
+                    <td>{{ chapter.questions|length }}</td>
+                    <td>
+                        <a href="{{ url_for('add_question', chapter_id=chapter.id) }}" class="btn btn-sm btn-primary">Add Question</a>
+                        <a href="{{ url_for('view_questions', chapter_id=chapter.id) }}" class="btn btn-sm btn-info">View Questions</a>
+                        <a href="{{ url_for('edit_chapter', chapter_id=chapter.id) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{{ url_for('delete_chapter', chapter_id=chapter.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?');">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-3">
+        <a href="{{ url_for('add_chapter', subject_id=subject.id) }}" class="btn btn-success">Add Chapter</a>
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">Back</a>
+    </div>
+</div>
+{% endblock %}

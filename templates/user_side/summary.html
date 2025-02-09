@@ -1,0 +1,40 @@
+{% extends "user_side/user_dashboard.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center fw-bold mb-4 text-primary">Your Quiz Performance</h2>
+
+    <!-- Quiz Performance Graph -->
+    <div class="card shadow-lg p-4 mb-4 border-0">
+        <h5 class="card-title text-center text-secondary fw-semibold">Quiz Progress Graph</h5>
+        <div class="text-center">
+            {% if img_base64 %}
+            <img src="data:image/png;base64,{{ img_base64 }}" class="img-fluid rounded shadow-sm"
+                alt="Quiz Performance Graph">
+            {% else %}
+            <p class="text-muted">No quiz results available.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Card for the Progress Bar -->
+    <div class="card shadow-sm p-3">
+        <h5 class="card-title text-center">Overall Performance</h5>
+        <div class="progress" style="height: 30px;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar"
+                style="width: {{ avg_score }}%" ; aria-valuenow="{{ avg_score }}" aria-valuemin="0" aria-valuemax="100">
+                {{ avg_score|round(2) }}%
+            </div>
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <div class="text-center mt-4">
+        <a href="{{ url_for('user_dashboard') }}" class="btn btn-outline-primary btn-lg px-4"
+            style="margin-bottom: 20px; padding: 10px 30px;">
+            <i class="bi bi-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+
+</div>
+{% endblock %}

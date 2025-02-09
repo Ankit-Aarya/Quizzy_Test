@@ -1,0 +1,160 @@
+{% extends "user_side/user_dashboard.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">{{ quiz.title }}</h2>
+
+    <!-- Timer -->
+    <div class="alert alert-info text-center">
+        Time Left: <span id="timer">{{ quiz.duration * 60 }}</span> seconds
+    </div>
+
+    <form id="quizForm" action="{{ url_for('submit_quiz', quiz_id=quiz.id) }}" method="POST">
+        {% for question in questions %}
+        <div class="mb-4 p-3 border rounded shadow-sm bg-light">
+            <p><strong>Q{{ loop.index }}: {{ question.text }}</strong></p>
+            <div class="form-check">
+                <input type="radio" name="question_{{ question.id }}" value="A" class="form-check-input" required>
+                <label class="form-check-label">{{ question.option_a }}</label>
+            </div>
+            <div class="form-check">
+                <input type="radio" name="question_{{ question.id }}" value="B" class="form-check-input" required>
+                <label class="form-check-label">{{ question.option_b }}</label>
+            </div>
+            <div class="form-check">
+                <input type="radio" name="question_{{ question.id }}" value="C" class="form-check-input" required>
+                <label class="form-check-label">{{ question.option_c }}</label>
+            </div>
+            <div class="form-check">
+                <input type="radio" name="question_{{ question.id }}" value="D" class="form-check-input" required>
+                <label class="form-check-label">{{ question.option_d }}</label>
+            </div>
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary w-100">Submit Quiz</button>
+    </form>
+
+    <!-- Hidden elements for webcam -->
+    <video id="webcam" autoplay style="display:none;"></video>
+    <canvas id="snapshotCanvas" style="display:none;"></canvas>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // **1. TIMER FUNCTION**
+    let timeLeft = {{ quiz.duration * 60 }};
+    function startTimer() {
+        let timerElement = document.getElementById("timer");
+        let timerInterval = setInterval(function () {
+            timeLeft--;
+            timerElement.textContent = timeLeft;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                alert("Time is up! Submitting the quiz.");
+                document.getElementById("quizForm").submit();
+            }
+        }, 1000);
+    }
+
+    // **2. SCREEN MONITORING**
+    let warningCount = 0;
+    document.addEventListener("visibilitychange", function () {
+        if (document.hidden) {
+            warningCount++;
+            alert(`Warning ${warningCount}: Do not switch tabs during the quiz!`);
+            captureSnapshot();
+            startRecording();
+
+            if (warningCount >= 3) {
+                alert("You have switched tabs multiple times. Submitting quiz automatically.");
+                document.getElementById("quizForm").submit();
+            }
+        }
+    });
+
+    // **3. WEBCAM SNAPSHOT**
+    let videoStream;
+    async function startWebcam() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            document.getElementById("webcam").srcObject = stream;
+            videoStream = stream;
+        } catch (error) {
+            console.error("Webcam access denied", error);
+        }
+    }
+
+    function captureSnapshot() {
+        let video = document.getElementById("webcam");
+        let canvas = document.getElementById("snapshotCanvas");
+        let context = canvas.getContext("2d");
+
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        let imageData = canvas.toDataURL("image/png"); // Convert to base64
+
+        fetch('/save_snapshot', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ 
+                user_id: "{{ user_id }}",
+                quiz_id: "{{ quiz.id }}",
+                image: imageData 
+            })
+        })
+        .then(response => response.json())
+        .then(data => console.log(data.message))
+        .catch(error => console.error('Error:', error));
+    }
+
+    // **4. MICROPHONE RECORDING**
+    let mediaRecorder;
+    let audioChunks = [];
+
+    async function startRecording() {
+        if (mediaRecorder && mediaRecorder.state === "recording") return;
+
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+
+            mediaRecorder.ondataavailable = event => {
+                audioChunks.push(event.data);
+            };
+
+            mediaRecorder.onstop = async () => {
+                const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+                const formData = new FormData();
+                formData.append("audio", audioBlob);
+                formData.append("user_id", "{{ user_id }}");
+                formData.append("quiz_id", "{{ quiz.id }}");
+
+                fetch('/save_audio', {
+                    method: "POST",
+                    body: formData
+                }).then(response => response.json())
+                  .then(data => console.log(data.message))
+                  .catch(error => console.error("Error:", error));
+
+                audioChunks = []; // Reset chunks
+            };
+
+            mediaRecorder.start();
+            setTimeout(() => mediaRecorder.stop(), 10000); // Record for 10 seconds
+        } catch (error) {
+            console.error("Microphone access denied", error);
+        }
+    }
+
+    // **5. START FUNCTIONS ON PAGE LOAD**
+    window.onload = function () {
+        startTimer();
+        startWebcam();
+    };
+</script>
+{% endblock %}

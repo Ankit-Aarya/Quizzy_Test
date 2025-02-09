@@ -1,0 +1,77 @@
+/* Login Page Styles */
+.login-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    margin-top: 5rem;
+    padding: 30px;
+    background-color: #f7f7f7;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 30px;
+    font-weight: bold;
+    color: #4e0fb4;
+    font-family: Arial, sans-serif;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-size: 20px;
+    color: #6e1dde;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    color: #333;
+    background-color: rgb(154, 249, 218);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    background-color: rgb(154, 249, 218) ;
+    border-color: #007bfe;
+    box-shadow: 1 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #129e25;
+    color: aquamarine;
+    border: none;
+    border-radius: 5px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #0d7223;
+    color: aquamarine;
+}
+
+@media screen and (max-width: 480px) {
+    .login-container {
+        padding: 20px;
+    }
+
+    .login-header {
+        font-size: 20px;
+    }
+}

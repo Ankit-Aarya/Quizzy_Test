@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+{% endblock %}
+
+{% block content %}
+   <h1 class="header"  style="text-align: center;
+        margin-top: 20px;
+        font-size: 2.5rem;
+        color: #34495e;"
+        >Welcome to Quizzy</h1>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <img src="{{ url_for('static', filename='images/img3.jpeg') }}" alt="Quiz" class="img-fluid">
+            </div>
+            <div class="col-md-6">
+                <p class="description">Quizzy is a platform where you can create quizzes and share them with your friends. You can also take quizzes created by others. It's a fun way to test your knowledge and learn new things.</p>
+                <a href="{{ url_for('register') }}" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

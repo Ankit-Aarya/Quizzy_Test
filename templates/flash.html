@@ -1,0 +1,31 @@
+<!-- flash message -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="flash-messages">
+    {% for category, message in messages %}
+    <div class="flash-message {{ category }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
+<!-- script for flash message -->
+<div>
+    <script>
+        // Wait for the DOM to fully load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Select all flash messages
+            const flashMessages = document.querySelectorAll('.flash-message');
+
+            // Set a timer to fade out and remove them
+            flashMessages.forEach((msg) => {
+                setTimeout(() => {
+                    msg.style.opacity = '0'; // Fade out
+                    setTimeout(() => msg.remove(), 500); // Remove from DOM after fade-out
+                }, 5000); // 5 seconds before fade-out
+            });
+        });
+    </script>
+</div>

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+    
+{% block title %}
+    Register - Quizzy
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+{% endblock %}
+
+{% block content %}
+    <!-- Register Form -->
+    <div class="login-container">
+        <form action="{{ url_for('register') }}" method="POST" class="Register-form">
+            <h1 class="Register-header">Register Page</h1>
+            <div class="form-group">
+                <!-- for username -->
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" class="form-control" placeholder="Enter Your E-mail"
+                    required>
+                <!-- for password -->
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" class="form-control"
+                    placeholder="Enter Your Password" required>
+                <!-- for confirm password -->
+                <label for="password">Confirm Password</label>
+                <input type="password" name="cpassword" id="cpassword" class="form-control"
+                    placeholder="Enter Your Confirm Password" required>
+            </div>
+
+            <div class="form-group">
+                <!-- for name -->
+                <label for="name">Full Name</label>
+                <input type="text" name="name" id="name" class="form-control" placeholder="Enter Your Full Name"
+                    required>
+
+                <!-- for qualification -->
+                <label for="qualification">Qualification</label>
+                <select name="qualification" id="qualification" class="form-control" required>
+                    <option value="" disabled selected>Select Your Qualification</option>
+                    <option value="High School">High School</option>
+                    <option value="Diploma">Diploma</option>
+                    <option value="Bachelor's Degree">Bachelor's Degree</option>
+                    <option value="Master's Degree">Master's Degree</option>
+                    <option value="Ph.D">Ph.D</option>
+                    <option value="Other">Other</option>
+                </select>
+                <!-- for dob -->
+                <label for="dob">DOB</label>
+                <input type="date" name="dob" id="dob" class="form-control" placeholder="Enter Your DOB" required>
+            </div>
+            <!-- submit butthon -->
+            <button type="submit" class="btn">Register</button>
+        </form>
+{% endblock %}
