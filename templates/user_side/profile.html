@@ -4,16 +4,15 @@
 Profile - Quizzy
 {% endblock %}
 {% block head %}
-<link rel="stylesheet" href="{{url_for('static', filename='css/nav1.css')}}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/flash.css') }}">
 {% endblock %}
 
 {% block content %}
-    <div class="heading">
-        <h1 class="display-1">
+    <div class="heading font-weight-bold">
+        <h1 class="display-4">
             Hello
-            <span class="text-muted">{{user.name}}</span>
+            <span>{{user.name}}</span>
         </h1>
     </div>
 
@@ -37,7 +36,7 @@ Profile - Quizzy
                 <label for="name">Name</label>
                 <input type="text" name="name" id="name" class="form-control" placeholder="Enter your name" value="{{user.name}}" required>
             </div>
-            <button type="submit" class="btn">Update</button>
+            <button type="submit" class="btn btn-primary">Update</button>
         </form>
     </div>
 {% endblock %}
