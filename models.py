@@ -78,6 +78,7 @@ class AudioRecord(db.Model):
     audio = db.Column(db.LargeBinary, nullable=False)  # Store audio as binary
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
+
 # Create the database
 with app.app_context():
     db.create_all()
