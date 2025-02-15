@@ -587,7 +587,8 @@ def user_result_graph():
     )
 
     if not attempts:
-        return "No quiz results available."
+        flash("No Records Found", 'info')
+        return redirect(url_for("user_results"))
 
     # Extract quiz names and scores
     quiz_names = [quiz.title for _, quiz in attempts]
